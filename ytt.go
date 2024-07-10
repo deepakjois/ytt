@@ -45,7 +45,6 @@ func main() {
 		for _, tr := range transcript {
 			transcriptStr.WriteString(strings.TrimSpace(tr.Text) + "\n")
 		}
-
 	}
 
 	if *filepath == "" {
