@@ -4,7 +4,7 @@ Fetch YouTube transcripts
 ### Install
 
 ```
-go get github.com/deepakjois/ytt
+go get github.com/deepakjois/ytt@latest
 ```
 
 Make sure `$HOME/go/bin` is in path.
