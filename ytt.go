@@ -11,6 +11,11 @@ import (
 )
 
 func main() {
+	flag.Usage = func() {
+		fmt.Printf("%s <youtube_url>\n", os.Args[0])
+		flag.PrintDefaults()
+	}
+
 	// Define flags
 	noTimestamps := flag.Bool("no-timestamps", false, "Don't print timestamps")
 	filepath := flag.String("o", "", "Output filename (defaults to stdout)")
