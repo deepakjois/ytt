@@ -12,8 +12,8 @@ import (
 
 func main() {
 	// Define flags
-	noTimestamps := flag.Bool("no-timestamps", false, "Disable timestamps")
-	filepath := flag.String("o", "", "Output filename")
+	noTimestamps := flag.Bool("no-timestamps", false, "Don't print timestamps")
+	filepath := flag.String("o", "", "Output filename (defaults to stdout)")
 
 	// Parse flags
 	flag.Parse()
