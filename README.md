@@ -13,7 +13,7 @@ Make sure `$HOME/go/bin` is in path.
 
 ```
 $ ytt -h
-Usage of ytt:
+ytt <youtube_url>
   -no-timestamps
         Don't print timestamps
   -o string
