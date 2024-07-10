@@ -7,6 +7,8 @@ Fetch YouTube transcripts
 go get github.com/deepakjois/ytt
 ```
 
+Make sure `$HOME/go/bin` is in path.
+
 ### Usage
 
 ```
