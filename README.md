@@ -1,5 +1,5 @@
 # ytt
-Fetch YouTube transcripts
+Fetch YouTube transcripts. Adapted from [youtube-transcript-api](https://github.com/jdegoes/youtube-transcript-api).
 
 ### Install
 
@@ -14,6 +14,8 @@ Make sure `$HOME/go/bin` is in path.
 ```
 $ ytt -h
 ytt <youtube_url>
+  -lang string
+        Language code for the desired transcript (default "en")
   -no-timestamps
         Don't print timestamps
   -o string

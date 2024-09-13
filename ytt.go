@@ -3,11 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"html"
 	"os"
 	"strings"
 
 	"github.com/fatih/color"
-	"github.com/kkdai/youtube/v2"
 )
 
 func main() {
@@ -19,6 +19,7 @@ func main() {
 	// Define flags
 	noTimestamps := flag.Bool("no-timestamps", false, "Don't print timestamps")
 	filepath := flag.String("o", "", "Output filename (defaults to stdout)")
+	lang := flag.String("lang", "en", "Language code for the desired transcript")
 
 	// Parse flags
 	flag.Parse()
@@ -29,36 +30,72 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Extract Transcript
-	youtubeClient := youtube.Client{}
-
-	video, err := youtubeClient.GetVideo(flag.Arg(0))
+	videoID, err := ExtractVideoID(flag.Arg(0))
 	if err != nil {
-		printFancyError(fmt.Sprintf("failed to get video info: %v", err))
+		printFancyError(fmt.Sprintf("failed to extract video ID: %v", err))
 		os.Exit(1)
 	}
 
-	transcript, err := youtubeClient.GetTranscript(video, "en")
+	transcriptList, err := ListTranscripts(videoID)
 	if err != nil {
-		printFancyError(fmt.Sprintf("failed to get transcript info: %v", err))
+		printFancyError(fmt.Sprintf("failed to list transcripts: %v", err))
+		os.Exit(1)
 	}
 
-	var transcriptStr strings.Builder
-	if !*noTimestamps {
-		transcriptStr.WriteString(transcript.String())
-	} else {
-		for _, tr := range transcript {
-			transcriptStr.WriteString(strings.TrimSpace(tr.Text) + "\n")
+	// Choose the transcript with the specified language code
+	var transcript *Transcript
+	if *lang != "" {
+		transcript, err = transcriptList.FindTranscript(*lang)
+		if err != nil {
+			printFancyError(fmt.Sprintf("No transcript found for language code '%s'", *lang))
+			os.Exit(1)
 		}
+	} else {
+		// If no language specified, choose the first available transcript
+		for _, t := range transcriptList.ManuallyCreatedTranscripts {
+			transcript = t
+			break
+		}
+		if transcript == nil {
+			for _, t := range transcriptList.GeneratedTranscripts {
+				transcript = t
+				break
+			}
+		}
+	}
+	if transcript == nil {
+		printFancyError("No transcript available")
+		os.Exit(1)
 	}
 
-	if *filepath == "" {
-		fmt.Println(transcriptStr.String())
-	} else {
-		if err = os.WriteFile(*filepath, []byte(transcriptStr.String()), 0644); err != nil {
-			printFancyError(fmt.Sprintf("failed to write cleaned transcript: %v", err))
-		}
+	entries, err := transcript.Fetch()
+	if err != nil {
+		printFancyError(fmt.Sprintf("Failed to fetch transcript: %v", err))
+		os.Exit(1)
 	}
+
+	var sb strings.Builder
+	for _, entry := range entries {
+		if !*noTimestamps {
+			sb.WriteString(fmt.Sprintf("%.2f:%.2f\t", entry.Start, entry.Start+entry.Duration))
+		}
+		sb.WriteString(html.UnescapeString(entry.Text))
+		sb.WriteString("\n")
+	}
+
+	output := sb.String()
+
+	if *filepath != "" {
+		err = os.WriteFile(*filepath, []byte(output), 0644)
+		if err != nil {
+			printFancyError(fmt.Sprintf("Failed to write to file: %v", err))
+			os.Exit(1)
+		}
+		fmt.Printf("Transcript written to %s\n", *filepath)
+	} else {
+		fmt.Print(output)
+	}
+
 }
 
 func printFancyError(message string) {
