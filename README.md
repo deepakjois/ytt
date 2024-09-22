@@ -6,7 +6,7 @@ Fetch YouTube transcripts. Adapted from [youtube-transcript-api](https://github.
 ### Install
 
 ```
-go install github.com/deepakjois/ytt@latest
+go install github.com/deepakjois/ytt/cmd/ytt@latest
 ```
 
 Make sure `$HOME/go/bin` is in path.
