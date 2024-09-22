@@ -21,3 +21,12 @@ ytt <youtube_url>
   -o string
         Output filename (defaults to stdout)
 ```
+
+### Library
+
+```
+import "github.com/deepakjois/ytt"
+```
+
+For detailed API documentation, visit [pkg.go.dev](https://pkg.go.dev/github.com/deepakjois/ytt).
+
