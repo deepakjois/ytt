@@ -1,7 +1,7 @@
 # ytt
 [![Go Reference](https://pkg.go.dev/badge/github.com/deepakjois/ytt.svg)](https://pkg.go.dev/github.com/deepakjois/ytt)
 
-Fetch YouTube transcripts. Adapted from [youtube-transcript-api](https://github.com/jdegoes/youtube-transcript-api).
+Fetch YouTube transcripts. Adapted from [youtube-transcript-api](https://github.com/jdepoix/youtube-transcript-api).
 
 ### Install
 
