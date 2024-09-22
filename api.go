@@ -1,4 +1,4 @@
-package main
+package ytt
 
 import (
 	"encoding/json"
@@ -26,7 +26,7 @@ var (
 	ErrInvalidFormat              = errors.New("invalid captions tracks format")
 )
 
-// ExtractVideoID extracts the videoID from the given string
+// ExtractVideoID extracts the videoID from the given string for a YouTube URL.
 func ExtractVideoID(videoID string) (string, error) {
 	if strings.Contains(videoID, "youtu") || strings.ContainsAny(videoID, "\"?&/<%=") {
 		for _, re := range videoRegexpList {
@@ -52,12 +52,14 @@ const (
 	watchURL = "https://www.youtube.com/watch?v=%s"
 )
 
+// TranscriptList represents a list of transcripts for a YouTube video.
 type TranscriptList struct {
 	VideoID                    string
 	ManuallyCreatedTranscripts map[string]*Transcript
 	GeneratedTranscripts       map[string]*Transcript
 }
 
+// Transcript represents a transcript for a YouTube video.
 type Transcript struct {
 	VideoID      string
 	URL          string
@@ -66,6 +68,7 @@ type Transcript struct {
 	IsGenerated  bool
 }
 
+// TranscriptEntry represents a transcript entry for a YouTube video.
 type TranscriptEntry struct {
 	Text     string  `xml:",chardata"`
 	Start    float64 `xml:"start,attr"`

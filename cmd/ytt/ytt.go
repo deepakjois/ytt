@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/deepakjois/ytt"
 	"github.com/fatih/color"
 )
 
@@ -30,20 +31,20 @@ func main() {
 		os.Exit(1)
 	}
 
-	videoID, err := ExtractVideoID(flag.Arg(0))
+	videoID, err := ytt.ExtractVideoID(flag.Arg(0))
 	if err != nil {
 		printFancyError(fmt.Sprintf("failed to extract video ID: %v", err))
 		os.Exit(1)
 	}
 
-	transcriptList, err := ListTranscripts(videoID)
+	transcriptList, err := ytt.ListTranscripts(videoID)
 	if err != nil {
 		printFancyError(fmt.Sprintf("failed to list transcripts: %v", err))
 		os.Exit(1)
 	}
 
 	// Choose the transcript with the specified language code
-	var transcript *Transcript
+	var transcript *ytt.Transcript
 	if *lang != "" {
 		transcript, err = transcriptList.FindTranscript(*lang)
 		if err != nil {

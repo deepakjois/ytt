@@ -1,6 +1,6 @@
 module github.com/deepakjois/ytt
 
-go 1.22.5
+go 1.20
 
 require github.com/fatih/color v1.17.0
 
